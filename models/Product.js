@@ -6,31 +6,6 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    description: {
-      type: String,
-      default: "",
-    },
-    sku: {
-      type: String,
-      default: "",
-    },
-    slug: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    options: [
-      {
-        name: { type: String, required: true }, // Например, "Размер"
-        values: [{ type: String, required: true }], // ["S", "M", "L"]
-      },
-    ],
-    images: [
-      {
-        type: String,
-        default: "",
-      },
-    ],
     quantity: {
       type: Number,
       default: 0,
@@ -41,6 +16,32 @@ const ProductSchema = new mongoose.Schema(
       default: 1,
       required: true,
     },
+    // TODO
+    // description: {
+    //   type: String,
+    //   default: "",
+    // },
+    // sku: {
+    //   type: String,
+    //   default: "",
+    // },
+    // slug: {
+    //   type: String,
+    //   required: true,
+    //   unique: true,
+    // },
+    // options: [
+    //   {
+    //     name: { type: String, required: true }, // Например, "Размер"
+    //     values: [{ type: String, required: true }], // ["S", "M", "L"]
+    //   },
+    // ],
+    // images: [
+    //   {
+    //     type: String,
+    //     default: "",
+    //   },
+    // ],
   },
   {
     timestamps: true,
