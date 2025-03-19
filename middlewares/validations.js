@@ -1,13 +1,21 @@
 import { body } from "express-validator";
 
-//TODO
-// export const loginValidation = [
-//   body("email", "Invalid email format").isEmail(),
-//   body("password", "Password must be at least 5 characters long").isLength({
-//     min: 5,
-//   }),
-// ];
+export const loginValidation = [
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("Email and password required")
+    .isEmail()
+    .withMessage("Invalid email format"),
 
+  body("password")
+    .notEmpty()
+    .withMessage("Email and password required")
+    .isLength({ min: 5 })
+    .withMessage("Password must be at least 5 characters long"),
+];
+
+//TODO
 // export const registerValidation = [
 //   body("email", "Invalid email format").isEmail(),
 //   body("password", "Password must be at least 5 characters long").isLength({

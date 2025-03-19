@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 
 import connectDatabase from "./db.js";
-import { ProductRoute } from "./routes/index.js";
+import { ProductRoute, UserRoute } from "./routes/index.js";
 
 const app = express();
 app.use(express.json());
@@ -10,6 +10,7 @@ app.use(express.json());
 connectDatabase();
 
 app.use("/api", ProductRoute.router);
+app.use("/api", UserRoute.router);
 
 app.get("*", (req, res) => {
   res.json("test");
