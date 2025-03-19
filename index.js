@@ -2,14 +2,14 @@ import "dotenv/config";
 import express from "express";
 
 import connectDatabase from "./db.js";
-import { ProductController } from "./controllers/index.js";
+import { ProductRoute } from "./routes/index.js";
 
 const app = express();
 app.use(express.json());
 
 connectDatabase();
 
-app.post("/api/products", ProductController.create);
+app.use("/api", ProductRoute.router);
 
 app.get("*", (req, res) => {
   res.json("test");

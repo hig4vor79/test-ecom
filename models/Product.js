@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 const ProductSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: [true, "Please Enter Product Title"],
+      minLength: [2, "Title should have at least 2 chars"],
     },
     quantity: {
       type: Number,
@@ -17,6 +19,11 @@ const ProductSchema = new mongoose.Schema(
       required: true,
     },
     // TODO
+    // slug: {
+    //   type: String,
+    //   unique: true,
+    //   minLength: [2, "Slug should have at least 2 chars"],
+    // },
     // description: {
     //   type: String,
     //   default: "",
@@ -24,11 +31,6 @@ const ProductSchema = new mongoose.Schema(
     // sku: {
     //   type: String,
     //   default: "",
-    // },
-    // slug: {
-    //   type: String,
-    //   required: true,
-    //   unique: true,
     // },
     // options: [
     //   {
@@ -49,4 +51,35 @@ const ProductSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Product", ProductSchema);
+// TODO уникальные slugs
+// ProductSchema.pre("save", async function (next) {
+//   // Если поле "slug" уже присутствует и оно изменилось, проверяем его
+//   if (this.slug && this.isModified("slug")) {
+//     // Преобразуем slug в правильный формат (нижний регистр, без специальных символов и пробелов)
+//     this.slug = slugify(this.slug, { lower: true, strict: true });
+
+//     // Проверяем, существует ли уже продукт с таким же slug
+//     const existingProduct = await this.constructor.findOne({ slug: this.slug });
+
+//     if (
+//       existingProduct &&
+//       existingProduct._id.toString() !== this._id.toString()
+//     ) {
+//       let newSlug;
+//       let counter = 1;
+//       while (existingProduct) {
+//         newSlug = `${this.slug}-${counter}`;
+//         existingProduct = await this.constructor.findOne({ slug: newSlug });
+//         counter++;
+//       }
+
+//       this.slug = newSlug;
+//     }
+//   }
+
+//   next();
+// });
+
+const ProductModel = mongoose.model("Product", ProductSchema);
+
+export { ProductModel };
