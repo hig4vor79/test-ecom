@@ -18,7 +18,25 @@ const ProductSchema = new mongoose.Schema(
       default: 1,
       required: true,
     },
+    variations: [
+      {
+        name: { type: String, required: true }, // "Время аренды"
+        values: [
+          {
+            name: { type: String, required: true }, // 3 месяца
+            price: { type: Number, required: true }, // 195
+          },
+        ],
+      },
+    ],
+
     // TODO
+    // options: [
+    //   {
+    //     name: { type: String, required: true }, // Например, "Размер"
+    //     values: [{ type: String, required: true }], // ["S", "M", "L"]
+    //   },
+    // ],
     // slug: {
     //   type: String,
     //   unique: true,
@@ -32,12 +50,6 @@ const ProductSchema = new mongoose.Schema(
     //   type: String,
     //   default: "",
     // },
-    // options: [
-    //   {
-    //     name: { type: String, required: true }, // Например, "Размер"
-    //     values: [{ type: String, required: true }], // ["S", "M", "L"]
-    //   },
-    // ],
     // images: [
     //   {
     //     type: String,

@@ -2,13 +2,14 @@ import { ProductModel } from "../models/index.js";
 
 // Create Product ---ADMIN
 export const create = async (req, res) => {
-  const { title, quantity, price } = req.body;
+  const { title, quantity, price, variations } = req.body;
 
   try {
     const doc = new ProductModel({
       title,
       quantity,
       price,
+      variations,
     });
 
     const product = await doc.save();
