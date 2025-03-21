@@ -15,6 +15,10 @@ export const loginValidation = [
     .withMessage("Password must be at least 5 characters long"),
 ];
 
+export const createOrderValidation = [
+  body("items", "Must be at least 1 item").notEmpty(),
+];
+
 //TODO
 // export const registerValidation = [
 //   body("email", "Invalid email format").isEmail(),

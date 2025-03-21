@@ -13,7 +13,6 @@ const OrderSchema = new mongoose.Schema(
         variations: {
           name: String,
           price: String,
-
         },
         expiresAt: Date,
         productStatus: {
