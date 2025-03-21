@@ -18,44 +18,30 @@ const ProductSchema = new mongoose.Schema(
       default: 1,
       required: true,
     },
-    variations: [
+    description: String,
+    sku: {
+      type: String,
+      default: "",
+    },
+    images: String,
+    slug: {
+      type: String,
+      unique: true,
+      required: [true, "Slug is require"],
+      minLength: [2, "Slug should have at least 2 chars"],
+    },
+    durations: [
       {
-        name: { type: String, required: true }, // "Время аренды"
-        values: [
-          {
-            name: { type: String, required: true }, // 3 месяца
-            price: { type: Number, required: true }, // 195
-          },
-        ],
+        name: { type: String, required: true }, // 1 месяц
+        price: { type: Number, required: true }, // 65
       },
     ],
-
-    // TODO
-    // options: [
-    //   {
-    //     name: { type: String, required: true }, // Например, "Размер"
-    //     values: [{ type: String, required: true }], // ["S", "M", "L"]
-    //   },
-    // ],
-    // slug: {
-    //   type: String,
-    //   unique: true,
-    //   minLength: [2, "Slug should have at least 2 chars"],
-    // },
-    // description: {
-    //   type: String,
-    //   default: "",
-    // },
-    // sku: {
-    //   type: String,
-    //   default: "",
-    // },
-    // images: [
-    //   {
-    //     type: String,
-    //     default: "",
-    //   },
-    // ],
+    options: [
+      {
+        name: { type: String, required: true }, // Например, "Размер"
+        values: [{ type: String, required: true }], // ["S", "M", "L"]
+      },
+    ],
   },
   {
     timestamps: true,

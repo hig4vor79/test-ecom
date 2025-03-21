@@ -5,7 +5,7 @@ import { UserModel } from "../models/index.js";
 
 // Register User
 export const registration = async (req, res) => {
-  let { name, email, password } = req.body;
+  let { email, password } = req.body;
 
   try {
     const existingUser = await UserModel.findOne({ email });
@@ -16,16 +16,11 @@ export const registration = async (req, res) => {
       });
     }
 
-    if (!name) {
-      name = email.split("@")[0];
-    }
-
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
     const doc = new UserModel({
       email: email,
-      name: name,
       passwordHash: passwordHash,
     });
 
@@ -101,12 +96,11 @@ export const login = async (req, res) => {
   }
 };
 
-//TODO Get User Details
+// Get User Details
 export const getMe = async (req, res) => {
-  let { id } = req.body;
+  let { id } = req.userId;
 
   try {
-    // TODO проверку на тот ли это юзер
     const user = await UserModel.findById(id);
 
     if (!user) {
@@ -131,7 +125,7 @@ export const getMe = async (req, res) => {
 
 //TODO Update User Profile
 export const updateProfile = async (req, res) => {
-  let { test } = req.body;
+  let { password, email, newPassword } = req.body;
 
   try {
   } catch (error) {
@@ -162,8 +156,8 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-// Get User Details --ADMIN
-export const getUserDetails = async (req, res) => {
+//TODO Get User Details --ADMIN
+export const getUserById = async (req, res) => {
   let { id } = req.body;
 
   try {
