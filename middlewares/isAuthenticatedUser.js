@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export default isAuthenticatedUser = (req, res, next) => {
+const isAuthenticatedUser = (req, res, next) => {
   const token = (req.headers.authorization || "").replace(/Bearer\s?/, "");
 
   if (token) {
@@ -20,3 +20,4 @@ export default isAuthenticatedUser = (req, res, next) => {
     });
   }
 };
+export default isAuthenticatedUser;

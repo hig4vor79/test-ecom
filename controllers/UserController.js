@@ -123,15 +123,40 @@ export const getMe = async (req, res) => {
   }
 };
 
-//TODO Update User Profile
+// Update User Profile
 export const updateProfile = async (req, res) => {
   let { password, email, newPassword } = req.body;
 
   try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    const isValidPass = await bcrypt.compare(password, user.passwordHash);
+
+    if (!isValidPass) {
+      return res.status(400).json({
+        message: "Invalid password",
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(newPassword, salt);
+
+    user.passwordHash = passwordHash;
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Update user is success",
+    });
   } catch (error) {
-    console.log("Register user error: " + error);
+    console.log("Update user error: " + error);
     res.status(500).json({
-      message: "Register user error",
+      message: "Update user error",
       error,
     });
   }

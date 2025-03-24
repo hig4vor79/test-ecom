@@ -1,7 +1,11 @@
 import express from "express";
 import { UserController } from "../controllers/index.js";
-import { loginValidation } from "../middlewares/validations.js";
+import {
+  loginValidation,
+  updateValidation,
+} from "../middlewares/validations.js";
 import handleValidationErrors from "../middlewares/handleValidationErrors.js";
+import isAuthenticatedUser from "../middlewares/isAuthenticatedUser.js";
 
 const router = express.Router();
 
@@ -11,9 +15,16 @@ router
   .post(loginValidation, handleValidationErrors, UserController.login);
 
 router.route("/user/getMe").get(UserController.getMe);
-router.route("/user/updateProfile").put(UserController.updateProfile);
+router
+  .route("/user/update")
+  .put(
+    updateValidation,
+    handleValidationErrors,
+    isAuthenticatedUser,
+    UserController.updateProfile
+  );
 
-router.route("/admin/getAllUsers").get(UserController.getAllUsers);
-router.route("/admin/getUserDetails/:id").get(UserController.getUserDetails);
+router.route("/admin/users").get(UserController.getAllUsers);
+router.route("/admin/getUserDetails/:id").get(UserController.getUserById);
 
 export { router };

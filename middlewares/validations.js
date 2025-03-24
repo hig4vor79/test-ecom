@@ -15,6 +15,22 @@ export const loginValidation = [
     .withMessage("Password must be at least 5 characters long"),
 ];
 
+export const updateValidation = [
+  body("password")
+    .trim()
+    .notEmpty()
+    .withMessage("Password required")
+    .isLength({ min: 5 })
+    .withMessage("Password must be at least 5 characters long"),
+
+  body("newPassword", "Password must be at least 5 characters long")
+    .trim()
+    .notEmpty()
+    .withMessage("New password required")
+    .isLength({ min: 5 })
+    .withMessage("New password must be at least 5 characters long"),
+];
+
 export const createOrderValidation = [
   body("items", "Must be at least 1 item").notEmpty(),
 ];
@@ -22,15 +38,6 @@ export const createOrderValidation = [
 //TODO
 // export const registerValidation = [
 //   body("email", "Invalid email format").isEmail(),
-//   body("password", "Password must be at least 5 characters long").isLength({
-//     min: 5,
-//   }),
-// ];
-
-// export const updateValidation = [
-//   body("newPassword", "Password must be at least 5 characters long").isLength({
-//     min: 5,
-//   }),
 //   body("password", "Password must be at least 5 characters long").isLength({
 //     min: 5,
 //   }),
