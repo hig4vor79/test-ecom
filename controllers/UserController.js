@@ -96,33 +96,6 @@ export const login = async (req, res) => {
   }
 };
 
-// Get User Details
-export const getMe = async (req, res) => {
-  let { id } = req.userId;
-
-  try {
-    const user = await UserModel.findById(id);
-
-    if (!user) {
-      return res.status(404).json({
-        message: "User does not exist",
-      });
-    }
-
-    const { ...userData } = user._doc;
-
-    res.status(200).json({
-      userData,
-    });
-  } catch (error) {
-    console.log("Get user details error: " + error);
-    res.status(500).json({
-      message: "Get user details error",
-      error,
-    });
-  }
-};
-
 // Update User Profile
 export const updateProfile = async (req, res) => {
   let { password, email, newPassword } = req.body;
@@ -162,26 +135,7 @@ export const updateProfile = async (req, res) => {
   }
 };
 
-// Get All Users --ADMIN
-export const getAllUsers = async (req, res) => {
-  let { test } = req.body;
-
-  try {
-    const users = await UserModel.find().exec();
-
-    res.status(200).json({
-      users,
-    });
-  } catch (error) {
-    console.log("Get all users error: " + error);
-    res.status(500).json({
-      message: "Get all users error",
-      error,
-    });
-  }
-};
-
-//TODO Get User Details --ADMIN
+// Get User Details
 export const getUserById = async (req, res) => {
   let { id } = req.body;
 
@@ -207,3 +161,23 @@ export const getUserById = async (req, res) => {
     });
   }
 };
+
+// Get All Users --ADMIN
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find().exec();
+
+    res.status(200).json({
+      users,
+    });
+  } catch (error) {
+    console.log("Get all users error: " + error);
+    res.status(500).json({
+      message: "Get all users error",
+      error,
+    });
+  }
+};
+
+// TODO Reset user password
+export const resetPassword = async (req, res) => {};
