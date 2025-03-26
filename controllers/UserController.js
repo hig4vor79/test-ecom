@@ -97,7 +97,7 @@ export const login = async (req, res) => {
 };
 
 // Update User Profile
-export const updateProfile = async (req, res) => {
+export const update = async (req, res) => {
   let { password, email, newPassword } = req.body;
 
   try {

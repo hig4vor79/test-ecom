@@ -21,14 +21,13 @@ router
   .route("/auth/login")
   .post(loginValidation, handleValidationErrors, UserController.login);
 
-router.route("/user/getMe").get(isAuthenticatedUser, UserController.getMe);
 router
   .route("/user/update")
   .put(
     updateValidation,
     handleValidationErrors,
     isAuthenticatedUser,
-    UserController.updateProfile
+    UserController.update
   );
 
 router.route("/user/:id").get(UserController.getUserById);

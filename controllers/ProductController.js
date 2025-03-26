@@ -24,6 +24,11 @@ export const create = async (req, res) => {
   }
 };
 
+// Update Product ---ADMIN
+export const update = async (req, res) => {
+
+}
+
 // Get one Product
 export const getProduct = async (req, res) => {
   try {
