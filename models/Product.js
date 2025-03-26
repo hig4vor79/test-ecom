@@ -13,7 +13,7 @@ const ProductSchema = new mongoose.Schema(
       default: 0,
       required: true,
     },
-    price: {
+    defaultPrice: {
       type: Number,
       default: 1,
       required: true,
@@ -23,7 +23,7 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    images: String,
+    image: String,
     slug: {
       type: String,
       unique: true,

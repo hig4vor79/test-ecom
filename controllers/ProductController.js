@@ -1,6 +1,24 @@
 import { ProductModel } from "../models/index.js";
 
-// Create Product ---ADMIN
+//TODO Get all Products
+export const getAllProducts = async (req, res) => {};
+
+// Get one Product
+export const getProductBySlug = async (req, res) => {
+  try {
+    const product = await ProductModel.findById(req.params.id);
+
+    res.status(201).json(product);
+  } catch (error) {
+    console.log("Get single product error: " + error);
+    res.status(500).json({
+      message: "Get single product error",
+      error,
+    });
+  }
+};
+
+// Create Product --ADMIN
 export const create = async (req, res) => {
   const { title, quantity, price, variations } = req.body;
 
@@ -24,22 +42,8 @@ export const create = async (req, res) => {
   }
 };
 
-// Update Product ---ADMIN
-export const update = async (req, res) => {
+// Update Product --ADMIN
+export const update = async (req, res) => {};
 
-}
-
-// Get one Product
-export const getProduct = async (req, res) => {
-  try {
-    const product = await ProductModel.findById(req.params.id);
-
-    res.status(201).json(product);
-  } catch (error) {
-    console.log("Get single product error: " + error);
-    res.status(500).json({
-      message: "Get single product error",
-      error,
-    });
-  }
-};
+// Remove Product --ADMIN
+export const remove = async (req, res) => {};

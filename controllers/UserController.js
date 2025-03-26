@@ -162,6 +162,9 @@ export const getUserById = async (req, res) => {
   }
 };
 
+// TODO Reset user password
+export const resetPassword = async (req, res) => {};
+
 // Get All Users --ADMIN
 export const getAllUsers = async (req, res) => {
   try {
@@ -178,6 +181,3 @@ export const getAllUsers = async (req, res) => {
     });
   }
 };
-
-// TODO Reset user password
-export const resetPassword = async (req, res) => {};
