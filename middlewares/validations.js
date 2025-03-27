@@ -63,7 +63,18 @@ export const createProductValidation = [
 ];
 
 export const createOrderValidation = [
-  body("items", "Must be at least 1 item").notEmpty(),
+  //   body("password")
+  //   .trim()
+  //   .notEmpty()
+  //   .withMessage("Password required")
+  //   .isLength({ min: 5 })
+  //   .withMessage("Password must be at least 5 characters long"),
+  // body("newPassword", "Password must be at least 5 characters long")
+  //   .trim()
+  //   .notEmpty()
+  //   .withMessage("New password required")
+  //   .isLength({ min: 5 })
+  //   .withMessage("New password must be at least 5 characters long"),
 ];
 
 // export const createProductValidation = [

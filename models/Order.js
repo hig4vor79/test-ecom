@@ -5,12 +5,8 @@ const OrderSchema = new mongoose.Schema(
     items: [
       {
         productId: mongoose.Schema.Types.ObjectId,
-        quantity: {
-          type: Number,
-          default: 1,
-        },
         price: Number,
-        variations: {
+        duration: {
           name: String,
           price: String,
         },
@@ -34,6 +30,7 @@ const OrderSchema = new mongoose.Schema(
       paymentMethod: {
         type: String,
         enum: ["wayforpay", "whitepay"],
+        required: [true, "Payment method required"],
       },
       status: String, // success, failed, pending
     },

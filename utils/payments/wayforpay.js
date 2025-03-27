@@ -5,19 +5,18 @@ import axios from "axios";
 const secretKey = process.env.SECRETKEY_WAYFORPAY;
 const merchantAccount = process.env.MERCHANT_ACCOUNT;
 const merchantDomain = process.env.MERCHANT_DOMAIN;
+const apiWayForPayUrl = process.env.API_WAYFORPAY;
 
 //TODO Create payment WayForPay
-export const createPaymentWayForPay = async (req, res) => {
+export const createPaymentWayForPay = async (amount) => {
   try {
-    const { amount, orderId } = req.body;
-
     const roundedAmount = Number(amount).toFixed(3);
     const payId = generateUUID();
 
     const orderReference = payId;
     const orderDate = Math.floor(new Date().getTime() / 1000);
     const currency = "USD";
-    const productName = ["Mac Mini M2 256GB"];
+    const productName = ["Mac Mini"];
     const productPrice = [roundedAmount];
     const productCount = ["1"];
 
@@ -55,41 +54,84 @@ export const createPaymentWayForPay = async (req, res) => {
       language: "en",
     };
 
-    const response = await axios.post(
-      "https://api.wayforpay.com/api",
-      requestData
-    );
+    if (process.env.NODE_ENV != "development") {
+      const response = await axios.post(apiWayForPayUrl, requestData);
 
-    console.log("START WAYFORPAY");
-    console.log(response);
+      const result = {
+        paymentId: payId,
+        data: response.data,
+      };
 
-    try {
-      const order = await OrderModel.findOne({ _id: orderId });
+      return result;
+    } else {
+      const devResult = {
+        paymentId: payId,
+        data: {
+          reason: "1100",
+          reasonCode: "Ok",
+          invoiceUrl:
+            "https://secure.wayforpay.com/pay/invoice?acc=netpeaknet&id=5534eb845b744d27b3ca57eb38a74599&sign=a4a923edd74f9b23bdd8922b4a2d8630",
+          qrCode: "https://wayforpay.com/qr/img/i343c70e046af?size=200",
+        },
+      };
 
-      if (!order) {
-        console.log("Order not found");
-      } else {
-        const orderOwner = order.user;
-
-        console.log("Order owner id: " + orderOwner);
-
-        // Update all orders of this user with status "Pending" and assign the paymentId
-        const updatedOrders = await OrderModel.updateMany(
-          { user: orderOwner, statusId: 1 }, // Make sure to filter orders with "Pending" status
-          { $set: { paymentId: payId } }
-        );
-      }
-
-      console.log("DB order payid update. PayId: " + payId);
-    } catch (error) {
-      console.error("Error updating order payid:", error);
+      return devResult;
     }
-
-    return res.status(200).json(response.data);
   } catch (error) {
-    console.error("Error creating invoice:", error);
-    res.status(500).send("Error creating invoice");
+    console.error("Error creating WAYFORPAY invoice:", error);
+    res.status(500).send("Error creating WAYFORPAY invoice");
   }
+};
+
+// TODO Обработчик для обратного вызова от WAYFORPAY
+export const handleCallbackWayForPay = async (req, res) => {
+  console.log("WAYFORPAY callback received");
+
+  // Доступ к строке JSON внутри объекта с null-прототипом
+  const rawData = Object.keys(req.body)[0]; // Получаем ключ, который содержит JSON строку
+
+  // Парсим строку в объект
+  const data = JSON.parse(rawData);
+
+  const currentTime = Math.floor(Date.now() / 1000);
+  const paramsToSign = [data.orderReference, "accept", currentTime];
+  const signature = generateSignature(paramsToSign);
+
+  const updateOrderStatus = async (status) => {
+    // try {
+    //   await OrderModel.updateMany(
+    //     { paymentId: data.orderReference },
+    //     { $set: { statusId: status } }
+    //   );
+    // } catch (err) {
+    //   console.error(
+    //     "Failed to update order status in database:",
+    //     err.message || err
+    //   );
+    //   res.status(500).send("Internal server error");
+    // }
+  };
+
+  const orders = await OrderModel.find({ paymentId: data.orderReference });
+
+  if (orders.length == 0) {
+    console.log("Product with this payID not find");
+  } else {
+    if (data.transactionStatus == "Approved") {
+      console.log("WAYFORPAY оплата успешна !");
+      await updateOrderStatus(2);
+    } else {
+      console.log("WAYFORPAY оплата не успешна");
+      await updateOrderStatus(5);
+    }
+  }
+
+  res.status(200).json({
+    orderReference: data.orderReference,
+    status: "accept",
+    time: currentTime,
+    signature: signature,
+  });
 };
 
 function generateSignature(params) {
@@ -107,54 +149,3 @@ function generateUUID() {
     return v.toString(16);
   });
 }
-
-// TODO Обработчик для обратного вызова от WAYFORPAY
-// export const handleCallbackWayForPay = async (req, res) => {
-//   console.log("WAYFORPAY callback received");
-
-//   // Доступ к строке JSON внутри объекта с null-прототипом
-//   const rawData = Object.keys(req.body)[0]; // Получаем ключ, который содержит JSON строку
-
-//   // Парсим строку в объект
-//   const data = JSON.parse(rawData);
-
-//   const currentTime = Math.floor(Date.now() / 1000);
-//   const paramsToSign = [data.orderReference, "accept", currentTime];
-//   const signature = generateSignature(paramsToSign);
-
-//   const updateOrderStatus = async (status) => {
-//     try {
-//       await OrderModel.updateMany(
-//         { paymentId: data.orderReference },
-//         { $set: { statusId: status } }
-//       );
-//     } catch (err) {
-//       console.error(
-//         "Failed to update order status in database:",
-//         err.message || err
-//       );
-//       res.status(500).send("Internal server error");
-//     }
-//   };
-
-//   const orders = await OrderModel.find({ paymentId: data.orderReference });
-
-//   if (orders.length == 0) {
-//     console.log("Product with this payID not find");
-//   } else {
-//     if (data.transactionStatus == "Approved") {
-//       console.log("WAYFORPAY оплата успешна !");
-//       await updateOrderStatus(2);
-//     } else {
-//       console.log("WAYFORPAY оплата не успешна");
-//       await updateOrderStatus(5);
-//     }
-//   }
-
-//   res.status(200).json({
-//     orderReference: data.orderReference,
-//     status: "accept",
-//     time: currentTime,
-//     signature: signature,
-//   });
-// };
