@@ -3,7 +3,7 @@ import { UserController } from "../controllers/index.js";
 import {
   loginValidation,
   registerValidation,
-  updateValidation,
+  updateUserValidation,
 } from "../middlewares/validations.js";
 import handleValidationErrors from "../middlewares/handleValidationErrors.js";
 import isAuthenticatedUser from "../middlewares/isAuthenticatedUser.js";
@@ -22,12 +22,12 @@ router
   .post(loginValidation, handleValidationErrors, UserController.login);
 
 router
-  .route("/user/update")
+  .route("/user/update/:id")
   .put(
-    updateValidation,
+    updateUserValidation,
     handleValidationErrors,
     isAuthenticatedUser,
-    UserController.update
+    UserController.updateUserById
   );
 
 router.route("/user/:id").get(UserController.getUserById);

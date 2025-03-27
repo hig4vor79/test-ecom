@@ -97,11 +97,14 @@ export const login = async (req, res) => {
 };
 
 // Update User Profile
-export const update = async (req, res) => {
-  let { password, email, newPassword } = req.body;
+export const updateUserById = async (req, res) => {
+  const id = req.params.id;
+
+  let { password, newPassword } = req.body;
 
   try {
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findById(id);
+
     if (!user) {
       return res.status(404).json({
         message: "User not found",

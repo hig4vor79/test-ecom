@@ -30,7 +30,7 @@ export const registerValidation = [
     .withMessage("Password must be at least 5 characters long"),
 ];
 
-export const updateValidation = [
+export const updateUserValidation = [
   body("password")
     .trim()
     .notEmpty()
@@ -44,6 +44,22 @@ export const updateValidation = [
     .withMessage("New password required")
     .isLength({ min: 5 })
     .withMessage("New password must be at least 5 characters long"),
+];
+
+export const createProductValidation = [
+  body("title").trim().notEmpty().withMessage("Title required"),
+
+  body("durations")
+    .isArray({ min: 1 })
+    .withMessage("Must have at least one lease term")
+    .custom((value) => {
+      if (
+        !value.every((d) => d.name && d.price && typeof d.price === "number")
+      ) {
+        throw new Error("Each lease term must have a valid name and price");
+      }
+      return true;
+    }),
 ];
 
 export const createOrderValidation = [

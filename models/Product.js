@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import slugify from "slugify";
 
 const ProductSchema = new mongoose.Schema(
   {
@@ -18,12 +17,18 @@ const ProductSchema = new mongoose.Schema(
       default: 1,
       required: true,
     },
-    description: String,
+    description: {
+      type: String,
+      default: "",
+    },
     sku: {
       type: String,
       default: "",
     },
-    image: String,
+    image: {
+      type: String,
+      default: "",
+    },
     slug: {
       type: String,
       unique: true,
@@ -32,14 +37,14 @@ const ProductSchema = new mongoose.Schema(
     },
     durations: [
       {
-        name: { type: String, required: true }, // 1 месяц
-        price: { type: Number, required: true }, // 65
+        name: { type: String, required: true },
+        price: { type: Number, required: true },
       },
     ],
     options: [
       {
-        name: { type: String, required: true }, // Например, "Размер"
-        values: [{ type: String, required: true }], // ["S", "M", "L"]
+        name: { type: String, required: true, default: "" },
+        values: [{ type: String, required: true, default: "" }],
       },
     ],
   },
@@ -48,35 +53,6 @@ const ProductSchema = new mongoose.Schema(
     collection: "products",
   }
 );
-
-// TODO уникальные slugs
-// ProductSchema.pre("save", async function (next) {
-//   // Если поле "slug" уже присутствует и оно изменилось, проверяем его
-//   if (this.slug && this.isModified("slug")) {
-//     // Преобразуем slug в правильный формат (нижний регистр, без специальных символов и пробелов)
-//     this.slug = slugify(this.slug, { lower: true, strict: true });
-
-//     // Проверяем, существует ли уже продукт с таким же slug
-//     const existingProduct = await this.constructor.findOne({ slug: this.slug });
-
-//     if (
-//       existingProduct &&
-//       existingProduct._id.toString() !== this._id.toString()
-//     ) {
-//       let newSlug;
-//       let counter = 1;
-//       while (existingProduct) {
-//         newSlug = `${this.slug}-${counter}`;
-//         existingProduct = await this.constructor.findOne({ slug: newSlug });
-//         counter++;
-//       }
-
-//       this.slug = newSlug;
-//     }
-//   }
-
-//   next();
-// });
 
 const ProductModel = mongoose.model("Product", ProductSchema);
 
