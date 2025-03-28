@@ -53,10 +53,10 @@ export const createProductValidation = [
     .isArray({ min: 1 })
     .withMessage("Must have at least one lease term")
     .custom((value) => {
-      if (
-        !value.every((d) => d.name && d.price && typeof d.price === "number")
-      ) {
-        throw new Error("Each lease term must have a valid name and price");
+      if (!value.every((d) => d.amount && d.price && d.unit)) {
+        throw new Error(
+          "Each lease term must have a valid amount / price / unit"
+        );
       }
       return true;
     }),

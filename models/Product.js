@@ -37,8 +37,16 @@ const ProductSchema = new mongoose.Schema(
     },
     durations: [
       {
-        name: { type: String, required: true },
-        price: { type: Number, required: true },
+        amount: {
+          type: Number,
+          required: true, //example 1 3 6 12
+        },
+        price: { type: Number, required: true }, //example 60 180 ....
+        unit: {
+          type: String,
+          enum: ["minute", "hour", "day", "month"],
+          required: true,
+        },
       },
     ],
     options: [

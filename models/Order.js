@@ -7,8 +7,9 @@ const OrderSchema = new mongoose.Schema(
         productId: mongoose.Schema.Types.ObjectId,
         price: Number,
         duration: {
-          name: String,
-          price: String,
+          amount: Number,
+          unit: { type: String, enum: ["minute", "hour", "day", "month"] },
+          price: Number,
         },
         expiresAt: Date,
         productStatus: {
