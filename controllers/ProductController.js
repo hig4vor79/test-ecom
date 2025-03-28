@@ -83,7 +83,7 @@ export const create = async (req, res) => {
 };
 
 // Update Product --ADMIN
-export const updateProductId = async (req, res) => {
+export const updateProductById = async (req, res) => {
   const id = req.params.id;
   const {
     title,

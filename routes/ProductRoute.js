@@ -14,7 +14,7 @@ router
     handleValidationErrors,
     ProductController.create
   );
-router.route("/product/:id").put(isAdmin, ProductController.updateProductId);
+router.route("/product/:id").put(isAdmin, ProductController.updateProductById);
 router
   .route("/product/:id")
   .delete(isAdmin, ProductController.removeProductById);
