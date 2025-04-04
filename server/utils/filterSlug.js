@@ -1,7 +1,6 @@
 import slugify from "slugify";
-import { ProductModel } from "../models/index.js";
 
-const filterSlug = async (slug, title) => {
+const filterSlug = async (slug, title, Model) => {
   // Если slug отсутствует, создаем его из title
   let newSlug = slug
     ? slugify(slug, { lower: true, strict: true })
@@ -11,7 +10,7 @@ const filterSlug = async (slug, title) => {
   let counter = 1;
 
   // Проверяем уникальность
-  while (await ProductModel.exists({ slug: uniqueSlug })) {
+  while (await Model.exists({ slug: uniqueSlug })) {
     uniqueSlug = `${newSlug}-${counter}`;
     counter++;
   }

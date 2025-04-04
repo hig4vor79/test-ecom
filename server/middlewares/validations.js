@@ -62,6 +62,12 @@ export const createProductValidation = [
     }),
 ];
 
+export const createPostValidation = [
+  body("title").trim().notEmpty().withMessage("Title required"),
+
+   
+];
+
 export const createOrderValidation = [
   //   body("password")
   //   .trim()

@@ -46,7 +46,7 @@ export const create = async (req, res) => {
   const { title, text, image, slug, userID } = req.body;
 
   try {
-    let slugToDb = await filterSlug(slug, title);
+    let slugToDb = await filterSlug(slug, title, CategoryModel);
 
     const doc = new CategoryModel({
       title,
@@ -73,7 +73,7 @@ export const updateCategoryById = async (req, res) => {
   const id = req.params.id;
   const { title, text, image, slug } = req.body;
 
-  let slugToDb = await filterSlug(slug, title);
+  let slugToDb = await filterSlug(slug, title, CategoryModel);
 
   try {
     const category = await CategoryModel.findByIdAndUpdate(

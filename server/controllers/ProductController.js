@@ -56,7 +56,7 @@ export const create = async (req, res) => {
   } = req.body;
 
   try {
-    let slugToDb = await filterSlug(slug, title);
+    let slugToDb = await filterSlug(slug, title, ProductModel);
 
     const doc = new ProductModel({
       title,
