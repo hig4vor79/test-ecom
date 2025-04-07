@@ -3,6 +3,7 @@ import { PostController } from "../controllers/index.js";
 import isAdmin from "../middlewares/isAdmin.js";
 import handleValidationErrors from "../middlewares/handleValidationErrors.js";
 import { createPostValidation } from "../middlewares/validations.js";
+import { uploadPostImage } from "../middlewares/multer.js";
 
 const router = express.Router();
 
@@ -12,9 +13,12 @@ router
     isAdmin,
     createPostValidation,
     handleValidationErrors,
+    uploadPostImage,
     PostController.create
   );
-router.route("/post/:id").put(isAdmin, PostController.updatePostById);
+router
+  .route("/post/:id")
+  .put(isAdmin, uploadPostImage, PostController.updatePostById);
 router.route("/post/:id").delete(isAdmin, PostController.removePostById);
 
 router.route("/post/:slug").get(PostController.getPostBySlug);

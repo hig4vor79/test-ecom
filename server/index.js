@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import path from "path";
 
 import connectDatabase from "./db.js";
 import {
@@ -12,29 +13,9 @@ import {
 const app = express();
 app.use(express.json());
 
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
 connectDatabase();
-
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => {
-    if (!fs.existsSync("uploads")) {
-      fs.mkdirSync("uploads");
-    }
-    cb(null, "uploads");
-  },
-  filename: (_, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage });
-
-app.use("/uploads", express.static("uploads"));
-
-app.post("/api/upload", checkAuth, upload.single("image"), (req, res) => {
-  res.json({
-    url: `/uploads/${req.file.originalname}`,
-  });
-});
 
 app.use("/api", ProductRoute.router);
 app.use("/api", UserRoute.router);
